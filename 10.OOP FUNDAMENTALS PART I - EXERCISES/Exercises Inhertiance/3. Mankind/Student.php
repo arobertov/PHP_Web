@@ -13,7 +13,12 @@ class Student extends Human
      */
     protected $facultyNumber;
 
-    /**
+    public function __construct( $firstName, $lastName ,$facultyNumber ) {
+    	$this->setFacultyNumber($facultyNumber);
+	    parent::__construct( $firstName, $lastName );
+    }
+
+	/**
      * @return string
      */
     public function getFacultyNumber(): string
@@ -32,8 +37,10 @@ class Student extends Human
         $this->facultyNumber = $facultyNumber;
     }
 
-
-
-
-
+	public function __toString() {
+    	return
+				" First Name: ". $this->getFirstName().
+		        "\n Last Name: ". $this->getLastName() .
+		        "\n Faculty number: ".$this->getFacultyNumber()."\n";
+	}
 }

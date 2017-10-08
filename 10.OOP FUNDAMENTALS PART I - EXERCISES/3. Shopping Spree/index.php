@@ -48,7 +48,6 @@ while (1){
 			break;
 		}
 	}
-
 }
 
 foreach ($persons as $person){
