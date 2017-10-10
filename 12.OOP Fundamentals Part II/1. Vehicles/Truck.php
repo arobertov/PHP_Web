@@ -8,46 +8,63 @@
 //include ('Vehicle.php');
 class Truck extends Vehicle
 {
-    public function setFuel($fuel){
-        $this->fuel = $fuel;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getFuel() {
+		return $this->fuel;
+	}
 
-    public function  getFuel(){
-        return $this->fuel;
-    }
+	/**
+	 * @param mixed $fuel
+	 */
+	public function setFuel( $fuel ) {
+		$this->fuel = $fuel;
+	}
 
-    public function setFpKm ($fpKm){
-        $this->fpKm = ($fpKm+1.6);
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getFpKm() {
+		return $this->fpKm;
+	}
 
-    public function getFpKm (){
-        return $this->fpKm;
-    }
+	/**
+	 * @param mixed $fpKm
+	 */
+	public function setFpKm( $fpKm ) {
+		$this->fpKm = $fpKm + 1.6;
+	}
 
-    public function setTravelled ($travelled){
-        $this->travelled += $travelled;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getTravelled() {
+		return $this->travelled;
+	}
 
-    function getTravelled (){
-        return $this->travelled;
-    }
+	/**
+	 * @param mixed $travelled
+	 */
+	public function setTravelled( $travelled ) {
+		$this->travelled = $travelled;
+	}
 
-    public function checkOperation($quantity){
+
+
+	public function vehicleDrive($quantity,$vehicle){
         if(($quantity*$this->getFpKm()) < $this->getFuel()){
             $this->setFuel($this->getFuel() - ($quantity*$this->getFpKm()));
             $this->setTravelled($quantity);
-            return true;
+	        echo "$vehicle travelled $quantity km \n";
         } else {
-            return false;
+	        echo "$vehicle needs refueling \n";
         }
     }
 
-    public function __construct(float $fuel, float $fpKm,float $travelled)
-    {
-        $this->setFuel($fuel);
-        $this->setFpKm($fpKm);
-        $this->setTravelled($travelled);
-    }
+	public function vehicleRefuel( $quantity ){
+		$this->setFuel($this->getFuel() + $quantity);
+	}
 
     public function __toString()
     {

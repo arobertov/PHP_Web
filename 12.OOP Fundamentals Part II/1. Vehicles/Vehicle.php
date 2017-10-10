@@ -12,12 +12,37 @@ abstract class Vehicle
    protected $fpKm;
    protected $travelled;
 
-   abstract function setFuel($fuel);
-   abstract function  getFuel();
+   abstract function vehicleDrive($quantity,$vehicle);
+   abstract function vehicleRefuel($quantity);
 
-   abstract function setFpKm ($fpKm);
-   abstract function getFpKm ();
+	public function setFuel($fuel){
+		$this->fuel = $fuel;
+	}
 
-   abstract function setTravelled ($travelled);
-   abstract function getTravelled ();
+	public function  getFuel(){
+		return $this->fuel;
+	}
+
+	public function setFpKm ($fpKm){
+		$this->fpKm = $fpKm;
+	}
+
+	public function getFpKm (){
+		return $this->fpKm;
+	}
+
+	public function setTravelled ($travelled){
+		$this->travelled += $travelled;
+	}
+
+	function getTravelled (){
+		return $this->travelled;
+	}
+
+	public function __construct(float $fuel, float $fpKm,float $travelled)
+	{
+		$this->setFuel($fuel);
+		$this->setFpKm($fpKm);
+		$this->setTravelled($travelled);
+	}
 }
