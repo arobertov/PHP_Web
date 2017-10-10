@@ -16,8 +16,6 @@ $car = new Car($fuel,$fpKm,$distance);
 
 list($vehicle,$fuel,$fpKm) = $inputTruck;
 $truck = new Truck($fuel,$fpKm,$distance);
- print_r($car);
- print_r($truck);
 $counter = trim(fgets(STDIN));
 for($i=0;$i<$counter;$i++){
     $command = explode(' ',trim(fgets(STDIN)));
