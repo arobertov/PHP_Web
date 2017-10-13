@@ -13,7 +13,7 @@ $persons      = [];
 $products     = [];
  for($i=0;$i< count($personMoney) - 1;$i++){
  	 $data = explode('=',$personMoney[$i]);
- 	 $person = new Identifiable($data[0],$data[1]);
+ 	 $person = new Person($data[0],$data[1]);
  	 $persons[] = $person;
  }
 for($i=0;$i< count($productPrice) - 1;$i++){
