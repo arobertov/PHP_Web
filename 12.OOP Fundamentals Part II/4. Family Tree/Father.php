@@ -7,7 +7,7 @@
  */
 include ('Person.php');
 
-class Father extends Person {
+class Father extends Identifiable {
 
 	public function getTimeLived(){
 		return ($this->getYearDead()-$this->getYearBirth());
@@ -19,7 +19,7 @@ class Father extends Person {
 
 	public function __toString() {
 		return
-			"1.Person: {$this->getName()}, {$this->getYearDead()} – {$this->getYearBirth()},
+			"1.Identifiable: {$this->getName()}, {$this->getYearDead()} – {$this->getYearBirth()},
 			 lived {$this->getTimeLived()} years \n";
 	}
 }

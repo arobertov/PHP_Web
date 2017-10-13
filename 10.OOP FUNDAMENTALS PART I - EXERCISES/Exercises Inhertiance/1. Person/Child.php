@@ -7,7 +7,7 @@
  */
 declare(strict_types = 1);
 include('Person.php');
-class Child extends Person
+class Child extends Identifiable
 {
     public function setAge(int $age)
     {

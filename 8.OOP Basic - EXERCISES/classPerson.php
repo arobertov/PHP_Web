@@ -10,5 +10,5 @@ class Person {
 	public $age;
 }
 
-$person = new Person();
+$person = new Identifiable();
 echo(count(get_object_vars($person)));

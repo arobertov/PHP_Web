@@ -20,4 +20,4 @@ class Person {
 $name = trim(fgets(STDIN));
 $age = trim(fgets(STDIN));
 
-$person1 = new Person($name,$age);
+$person1 = new Identifiable($name,$age);

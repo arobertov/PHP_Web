@@ -26,7 +26,7 @@ for($i=0;$i<$count;$i++){
 		(trim(fgets(STDIN)))
 	);
 	if($input[1]>30) {
-		$person[] = new Person( (string)$input[0], (int)($input[1]) );
+		$person[] = new Identifiable( (string)$input[0], (int)($input[1]) );
 	}
 }
 

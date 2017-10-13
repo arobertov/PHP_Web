@@ -57,4 +57,4 @@ class Person {
 
 }
 
-$person = new Person('Ani', 58);
+$person = new Identifiable('Ani', 58);
