@@ -1,11 +1,12 @@
 <?php
-include ('geography_db.php');
-include ('mypdo.php');
+include ('../geography_db.php');
+include ('../mypdo.php');
 
 while (1) {
     $input = trim(fgets(STDIN));
     if($input == 'Bye'){
         echo 'Good bye!';
+        break;
     }
     try {
         $db = new MyPDO("mysql:dbname=$db_name;host=$db_host", $db_user,

@@ -1,6 +1,6 @@
 <?php
-include ('geography_db.php');
-include ('mypdo.php');
+include ('../geography_db.php');
+include ('../mypdo.php');
 
 try {
     $db = new MyPDO("mysql:dbname=$db_name;host=$db_host", $db_user,
