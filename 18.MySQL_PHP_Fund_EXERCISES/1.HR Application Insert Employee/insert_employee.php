@@ -4,7 +4,7 @@ include ('db_config.php');
 
 $employee = new Employee($db);
 while ('End'!= $input = explode(',',trim(fgets(STDIN)))) {
-    if(count($input)< 6 || count($input)>6){
+    if(count($input)< 6 || count($input)> 6){
         echo "Error: Please, check your input syntax. \n";
         continue;
     }
