@@ -33,9 +33,9 @@ function isEmail($email){
 }
 
 function printEmail($row){
-    if(isEmail($row['work_email']))
+    if(isPhone($row['work_email']))
         echo "work:{$row['work_email']}";
-    if (isEmail($row['personal_email'])) {
+    if (isPhone($row['personal_email'])) {
         echo " ,personal:{$row['personal_email']} \n";
     }else {
         echo "\n";

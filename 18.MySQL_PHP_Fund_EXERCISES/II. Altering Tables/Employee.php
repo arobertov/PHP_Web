@@ -15,11 +15,29 @@ class Employee
         $this->inst = $db;
     }
 
+	public function getPhone($firstName,$lastName){
+    	try {
+		$db_stm = $this->inst->prepare("SELECT `empl`.id,`empl`.first_name,`empl`.middle_name,
+                                                    `empl`.last_name,`empl`.department,`empl`.`position`,
+                                                    `ph`.`work_phone`,`ph`.`personal_phone`
+                                            FROM `employee` as `empl`
+                                            INNER JOIN `employee_phones` as `ph` 
+                 
+                                            ON `empl`.first_name = ? 
+                                            AND `empl`.last_name = ?  
+                                            AND `ph`.`employee_id` = `empl`.`id`");
+		$db_stm->execute(array($firstName,$lastName));
+		return $result = $db_stm->fetchAll(PDO::FETCH_ASSOC);
+	} catch (PDOException $e) {
+print "PDO Error: " . $e->getMessage() .PHP_EOL;
+}
+return false;
+	}
 
     public function getEmail($firstName,$lastName){
         try{
             $db_stm = $this->inst->prepare("SELECT `empl`.id,`empl`.first_name,`empl`.middle_name,
-                                                    `empl`.last_name,`empl`.department,`empl`.`position`,
+                                                    `empl`.last_name,`empl`.department,`empl`.`position`,`empl`.`country`,
                                                     `em`.`work_email`,`em`.personal_email
                                             FROM `employee` as `empl`
                                             INNER JOIN `employee_emails` as `em` 
@@ -32,39 +50,90 @@ class Employee
         } catch (PDOException $e) {
             print "PDO Error: " . $e->getMessage() .PHP_EOL;
         }
+        return false;
+    }
+
+    public function getEmailUseWildcard($firstName){
+	    try{
+		    $name = str_replace('*','%',$firstName);
+		    $db_stm = $this->inst->prepare("SELECT `empl`.id,`empl`.first_name,`empl`.middle_name,
+                                                    `empl`.last_name,`empl`.department,`empl`.`position`,`empl`.`country`,
+                                                    `em`.`work_email`,`em`.personal_email
+                                            FROM `employee` as `empl`
+                                            INNER JOIN `employee_emails` as `em` 
+                 
+                                            ON `empl`.first_name LIKE ?   
+                                            AND `em`.`employee_id` = `empl`.`id`");
+		    $db_stm->execute(array($name));
+		    return $result = $db_stm->fetchAll(PDO::FETCH_ASSOC);
+	    } catch (PDOException $e) {
+		    print "PDO Error: " . $e->getMessage() .PHP_EOL;
+	    }
+	    return false;
     }
 
     // ---------------------- insert employee data ------------------------------------------------------- //
-    public function insertEmployee($firstName, $middleName, $lastName, $department, $position, $passportId)
+    public function insertEmployee($firstName, $middleName, $lastName, $department, $position, $passportId,$countryName)
     {
         try {
+	        $res = $this->getCountryCode(trim($countryName));
+        	if(count($res)>0){
+	            $country = '';
+	            foreach ($res as $row){
+	                $country = $row['country_code'];
+		        }
+        	}else {
+        		echo "No find this country with name $countryName \n";
+        		return false;
+	        }
             $db_stm = $this->inst->prepare("
-                            INSERT INTO `employee`(`first_name`,`middle_name`,`last_name`,`department`,`position`,`passport_id`)
-                            VALUES (:firstName,:middleName,:lastName,:department,:pos,:passportId)
+                            INSERT INTO `employee`(`first_name`,`middle_name`,`last_name`,`department`,`position`,`passport_id`,`country`)
+                            VALUES (:firstName,:middleName,:lastName,:department,:pos,:passportId,:country)
                             ");
-            $db_stm->bindParam('firstName', trim($firstName));
-            $db_stm->bindParam('middleName', trim($middleName));
-            $db_stm->bindParam('lastName', trim($lastName));
-            $db_stm->bindParam('department', trim($department));
-            $db_stm->bindParam('pos',trim($position));
-            $db_stm->bindParam('passportId', trim($passportId));
+            $db_stm->bindParam('firstName', $firstName);
+            $db_stm->bindParam('middleName', $middleName);
+            $db_stm->bindParam('lastName', $lastName);
+            $db_stm->bindParam('department', $department);
+            $db_stm->bindParam('pos',$position);
+            $db_stm->bindParam('passportId', $passportId);
+            $db_stm->bindParam ('country',$country);
 
             if ($db_stm -> execute()) {
                 return true;
-            } else return false;
+            }
+            return false;
         } catch (PDOException $e) {
             print "PDO Error: " . $e->getMessage() .PHP_EOL;
         }
+        return false;
     }
 
-    //----------------- methods to insert emails ---------------------------- //
+    private function getCountryCode($countryName) {
+    	try {
+		    $db_stm = $this->inst->prepare( "SELECT `countries`.country_code 
+										FROM `countries`
+										WHERE `countries`.`country_name` = ? OR `countries`.`iso_code` = ?
+										LIMIT 0,1
+										" );
+		    $db_stm->execute( array( $countryName,$countryName ) );
+
+		    return $result = $db_stm->fetchAll( PDO::FETCH_ASSOC );
+	    } catch (PDOException $e){
+    		echo 'Error1: '. $e->getMessage().PHP_EOL;
+	    }
+    }
+    //-----------------  insert phones ---------------------------- //
     public function insertPhones($firstName,$middleName,$lastName,$phones){
-        $result = $this->checkUnique($firstName,$middleName,$lastName);
+        $result = $this->checkUnique(trim($firstName),trim($middleName),trim($lastName));
         if($result == 1){
             $this->setPhones($phones,$result[0]);
             echo "Phones of $firstName $middleName $lastName saved \n";
         } else {
             echo "Employees with this name: \n";
+            if(count($result) < 1){
+	            echo "No person this names $firstName $middleName $lastName saved in database! \n";
+            	return false;
+            }
             foreach ($result as $id) {
                 echo $id;
                 echo ',';
@@ -75,14 +144,19 @@ class Employee
             $this->setPhones($phones,$id);
             echo "Phones of $firstName $middleName $lastName saved \n";
         }
+        return false;
     }
-
+	// -------------------- insert email method ---------------------- //
     public function insertEmail($firstName,$middleName,$lastName,$emails){
-        if($result = $this->checkUnique($firstName,$middleName,$lastName)){
+        $result = $this->checkUnique(trim($firstName),trim($middleName),trim($lastName));
           if(count($result)==1){
           $this->setEmails($emails,$result[0]);
           echo "Emails of $firstName $middleName $lastName saved. \n";
           } else {
+	          if(count($result)<1){
+	          	echo "No person this names $firstName $middleName $lastName saved in database! \n";
+	          	return false;
+	          }
               echo "Employees with this name: \n";
               foreach ($result as $id) {
                   echo $id;
@@ -94,8 +168,8 @@ class Employee
               $this->setEmails($emails,$id);
               echo "Emails of $firstName $middleName $lastName saved. \n";
           }
-        }
     }
+
 
     private function setEmails($emails,$id){
         $rawEmails = explode(',',trim($emails));
@@ -183,5 +257,9 @@ class Employee
         }
        return false;
     }
-
+	  // --------------- Delete Methods ------------------ //
+	public function deleteEmail ($id){
+    	$db_stm = $this->inst->prepare("DELETE FROM `geography`.`employee_emails` WHERE  `employee_id`=?;");
+    	$db_stm->execute(array($id));
+	}
 }
