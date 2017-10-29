@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML Form</title>
+</head>
+<body>
+   <form method="post">
+       <div class="group_one">
+           <div>
+               First name: <br/>
+           <input type="text" name="first_name"/>
+           </div>
+           <div>
+               Select Car:<br/>
+           <select>
+               <option value="volvo">Volvo</option>
+               <option value="saab">Saab</option>
+               <option value="mercedes">Mercedes</option>
+               <option value="audi">Audi</option>
+           </select>
+           </div>
+           <div>
+               Select Cars:<br/>
+               <select>
+                   <optgroup label="Italian Cars">
+                       <option value="volvo">Fiat</option>
+                       <option value="saab">Lanchia</option>
+                       <option value="ferrari">Ferrari</option>
+                       <option value="lamborgini">Lamborgini</option>
+                   </optgroup>
+                   <optgroup label="German Cars">
+                       <option value="mercedes">Mercedes</option>
+                       <option value="audi">Audi</option>
+                       <option value="Opel">Opel</option>
+                       <option value="Wolkswagen">Wolkswagen</option>
+                   </optgroup>
+               </select>
+           </div>
+           <div>
+               Check Vehicle: <br/>
+               <input type="checkbox" name="vehicle" value="Bike"/> I have a bike<br/>
+               <input type="checkbox" name="vehicle" value="Car" checked/> I have a car<br/>
+               <input type="checkbox" name="vehicle" value="Truck"/> I have a truck<br/>
+           </div>
+           <div>
+                 Choose Vehicle :<br/>
+               <fieldset id="group1">
+                   <input type="radio" value="airplane"> Airplane<br/>
+                   <input type="radio" value="ship">  Ship<br/>
+               </fieldset>
+                  Choose Class:<br/>
+               <fieldset id="group2">
+                   <input type="radio" value="class_one"> Class I<br/>
+                   <input type="radio" value="Class_two"> Class II<br/>
+               </fieldset>
+           </div>
+       </div>
+       <div class="group_two">
+           <div>
+               Birthday: <br/>
+               <input type="date" name="bday">
+           </div>
+           <div>
+               Choose color: <br/>
+               <input type="color" name="color"/>
+           </div>
+           <div>
+               Please insert text:<br/>
+               <textarea rows="5" cols="50">
+                   This is example text !!!!!!!
+               </textarea>
+           </div>
+           <div>
+               Please your email here:<br/>
+               <input type="email" name="email" placeholder="Email"/>
+           </div>
+           <div>
+               Set security level:<br/>
+               <input type="range" name="range"/>
+           </div>
+       </div>
+       <div id="submit">
+           <input type="submit" value="Submit"/>
+       </div>
+       
+   </form>
+</body>
+<style>
+    body{
+        margin: 0 auto;
+        width: 80%;
+        background: bisque;
+    }
+    form{
+        margin: 30px 20px;
+    }
+    .group_one,.group_two {
+        display: inline-block;
+        width: 45%;
+        vertical-align: top;
+        margin: 10px;
+    }
+    form div{
+        margin-bottom: 5px;
+    }
+    #submit{
+        padding-left: 30px;
+    }
+</style>
+</html>

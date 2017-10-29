@@ -1,4 +1,5 @@
 <?php
+namespace Cars;
 class Carshop
 {
     private $db = false;
