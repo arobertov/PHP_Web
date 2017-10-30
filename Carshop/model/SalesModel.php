@@ -221,15 +221,35 @@ class SalesModel extends Model{
 		}
 	}
 
-	public function readCarMake(){
+	public function searchData($data){
 		try {
+			switch (trim($data['colon'])){
+				case 'make':
+					$find = '`cr`.`make`';
+					break;
+				case 'model':
+					$find = '`cr`.`model`';
+					break;
+				case 'year':
+					$find = '`cr`.`year`';
+					break;
+				case 'first_name':
+					$find = '`cu`.`first_name`';
+					break;
+				case 'last_name':
+					$find = '`cu`.`last_name`';
+					break;
+				default:
+					break;
+			}
 			$stmt = $this->db->prepare( "
 			SELECT `cr`.make,`cr`.model,`cr`.`year`,`sl`.car_id,`cu`.`first_name`,`cu`.`last_name`,`sl`.customer_id 
 			FROM `sales` as `sl`
 			INNER JOIN `customers` as `cu` ON `cu`.id=`sl`.customer_id 
-			INNER JOIN `cars` as `cr` ON `cr`.car_id=`sl`.car_id AND `cr`.make = :make
+			INNER JOIN `cars` as `cr` ON `cr`.car_id = `sl`.car_id AND `cu`.id = `sl`.customer_id AND $find LIKE :data
 		" );
-			$stmt->bindParam( 'make', $this->make );
+			$var = trim($data['data']);
+			$stmt->bindParam( 'data',$var );
 			$stmt->execute();
 			$result = $stmt->fetchAll( PDO::FETCH_ASSOC );
 
@@ -286,9 +306,4 @@ class SalesModel extends Model{
 			exit;
 		}
 	}
-
-	protected function setProperty(){
-
-	}
-
 }

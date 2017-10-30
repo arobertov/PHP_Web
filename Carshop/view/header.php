@@ -12,7 +12,7 @@
                     <li><a href="?input=sales">All Sales</a> </li>
                     <li><a href="?input=customers">Customers Full Info</a> </li>
                     <li><a href="?input=sales">Cars List</a> </li>
-                    <li><a href="?input=search">Search Car Owner</a> </li>
+                    <li><a href="?input=search">Search Data</a> </li>
                 </ul>
             </nav>
         </header>

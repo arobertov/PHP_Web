@@ -101,16 +101,16 @@ class MyController extends Controller
     // Todo - Problem 6
     public function searchCarOwner() {
 	    $car = new  SalesModel($this->db);
-	    if(isset($_POST['make'])) {
-		    $car->setMake($_POST['make']);
-		    $result = $car->readCarMake();
+	    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+		    $result = $car->searchData($_POST);
 		    if(count($result)<1){
 		    	include "view/notingFound.php";
 		    } else {
 			    include "view/viewCarOwner.php";
 		    }
 	    } else {
-	    	include "view/searchCarOwner.php";
+	    	include "view/searchCarOwner.php";        
 	    }
     }
 }
